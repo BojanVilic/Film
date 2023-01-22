@@ -33,7 +33,8 @@ import com.bojanvilic.film.ui.models.MessageType
 @Composable
 fun ConversationsList(
     conversationsList: List<Conversation>,
-    onChatClicked: (Int) -> Unit
+    onChatClicked: (Int) -> Unit,
+    onStoryClicked: () -> Unit
 ) {
     Surface {
         LazyColumn(
@@ -44,6 +45,9 @@ fun ConversationsList(
                     conversation = conversationsList[it],
                     onChatClicked = { chatId ->
                         onChatClicked(chatId)
+                    },
+                    onStoryClicked = {
+                        onStoryClicked()
                     }
                 )
             }
@@ -54,7 +58,8 @@ fun ConversationsList(
 @Composable
 fun ConversationsListItem(
     conversation: Conversation,
-    onChatClicked: (Int) -> Unit
+    onChatClicked: (Int) -> Unit,
+    onStoryClicked: () -> Unit
 ) {
     val brush = Brush.horizontalGradient(
         listOf(
@@ -100,9 +105,8 @@ fun ConversationsListItem(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = if (conversation.hasActiveStory)
-                defaultImageModifier.clickable
-                {
-
+                defaultImageModifier.clickable {
+                    onStoryClicked()
                 } else defaultImageModifier
         )
         Column(
@@ -162,7 +166,8 @@ fun ConversationsListItemPreview() {
                 timestamp = "15:30",
                 hasActiveStory = true
             ),
-            onChatClicked = {}
+            onChatClicked = {},
+            onStoryClicked = {}
         )
     }
 }

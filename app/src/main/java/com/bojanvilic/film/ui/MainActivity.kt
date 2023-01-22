@@ -14,10 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bojanvilic.film.theme.AppTheme
 import com.bojanvilic.film.ui.components.TabRow
-import com.bojanvilic.film.ui.navigation.allScreen
-import com.bojanvilic.film.ui.navigation.chatScreen
-import com.bojanvilic.film.ui.navigation.generalScreen
-import com.bojanvilic.film.ui.navigation.requestsScreen
+import com.bojanvilic.film.ui.navigation.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,5 +63,6 @@ fun AppNavHost(
         generalScreen(navController)
         requestsScreen(navController)
         chatScreen(onBackClicked = { navController.navigateUp() })
+        storyScreen(onBackClicked = { navController.navigateUp() })
     }
 }
