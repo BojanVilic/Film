@@ -1,6 +1,7 @@
 package com.bojanvilic.film.ui.models
 
 data class Conversation(
+    val id: Int = 0,
     val image: String = "",
     val name: String = "",
     val previousMessageText: String = "",

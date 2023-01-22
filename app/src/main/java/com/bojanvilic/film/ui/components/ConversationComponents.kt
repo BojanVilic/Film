@@ -1,10 +1,8 @@
 package com.bojanvilic.film.ui.components
 
-import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +15,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,33 +32,43 @@ import com.bojanvilic.film.ui.models.MessageType
 
 @Composable
 fun ConversationsList(
-    paddingValues: PaddingValues,
-    conversationsList: List<Conversation>
+    conversationsList: List<Conversation>,
+    onChatClicked: (Int) -> Unit
 ) {
-    Surface(
-        modifier = Modifier.padding(paddingValues)
-    ) {
-        LazyColumn {
+    Surface {
+        LazyColumn(
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
             items(count = conversationsList.size) {
-                ConversationsListItem(conversationsList[it])
+                ConversationsListItem(
+                    conversation = conversationsList[it],
+                    onChatClicked = { chatId ->
+                        onChatClicked(chatId)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun ConversationsListItem(conversation: Conversation) {
-
-    val defaultModifier = Modifier
-        .size(64.dp)
-        .clip(CircleShape)
+fun ConversationsListItem(
+    conversation: Conversation,
+    onChatClicked: (Int) -> Unit
+) {
+    val brush = Brush.horizontalGradient(
+        listOf(
+            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.secondary
+        )
+    )
 
     val infiniteTransition = rememberInfiniteTransition()
-    val color by infiniteTransition.animateColor(
-        initialValue = Color(0xff157d76),
-        targetValue = Color(0xff13baae),
+    val rotateAnimation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(800, easing = LinearEasing),
+            animation = tween(1500, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         )
     )
@@ -67,7 +79,7 @@ fun ConversationsListItem(conversation: Conversation) {
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.medium)
             .clickable {
-
+                onChatClicked(conversation.id)
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -75,12 +87,17 @@ fun ConversationsListItem(conversation: Conversation) {
             painter = painterResource(id = R.drawable.kitten),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = if (conversation.hasActiveStory)
-                defaultModifier
-                    .border(3.dp, color, CircleShape)
-                    .clickable {
-
-                    } else defaultModifier
+            modifier = Modifier
+                .size(72.dp)
+                .padding(4.dp)
+                .drawBehind {
+                    if (conversation.hasActiveStory) {
+                        rotate(rotateAnimation) {
+                            drawCircle(brush, style = Stroke(20f))
+                        }
+                    }
+                }
+                .clip(CircleShape)
         )
         Column(
             modifier = Modifier.padding(horizontal = 8.dp),
@@ -138,7 +155,8 @@ fun ConversationsListItemPreview() {
                 previousMessageType = MessageType.VoiceMessage,
                 timestamp = "15:30",
                 hasActiveStory = true
-            )
+            ),
+            onChatClicked = {}
         )
     }
 }
