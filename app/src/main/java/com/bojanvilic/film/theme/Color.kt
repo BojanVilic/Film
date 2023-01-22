@@ -13,7 +13,7 @@ val light_theme_background = Color(0xFFeeeeee)
 val light_theme_onBackground = Color(0xFFeeeeee)
 val light_theme_surfaceTint = Color(0xFFeeeeee)
 val light_theme_surfaceVariant = Color(0xFFF1EAEA)
-val light_theme_onSurfaceVariant = Color(0xFF1b1b1b)
+val light_theme_onSurfaceVariant = Color(0xFFc4c4c4)
 
 val dark_theme_primary = Color(0xFFBE0001)
 val dark_theme_secondary = Color(0xFF800000)

@@ -6,6 +6,8 @@ import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -88,14 +90,20 @@ private fun Tab(
     Row(
         modifier = Modifier
             .padding(top = 16.dp)
-            .animateContentSize()
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+            .clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
             .selectable(
                 selected = selected,
                 onClick = onSelected,
                 role = Role.Tab,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
-                    bounded = false, radius = Dp.Unspecified, color = Color.Unspecified
+                    bounded = true, radius = Dp.Unspecified, color = Color.Unspecified,
                 )
             ),
         verticalAlignment = Alignment.Bottom
@@ -105,7 +113,6 @@ private fun Tab(
                 modifier = Modifier
                     .background(
                         MaterialTheme.colorScheme.secondary,
-                        RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp)
                     )
                     .padding(horizontal = 32.dp),
                 text = title,

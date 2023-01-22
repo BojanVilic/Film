@@ -73,6 +73,18 @@ fun ConversationsListItem(
         )
     )
 
+    val defaultImageModifier = Modifier
+        .size(72.dp)
+        .padding(4.dp)
+        .drawBehind {
+            if (conversation.hasActiveStory) {
+                rotate(rotateAnimation) {
+                    drawCircle(brush, style = Stroke(20f))
+                }
+            }
+        }
+        .clip(CircleShape)
+
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -87,17 +99,11 @@ fun ConversationsListItem(
             painter = painterResource(id = R.drawable.kitten),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(72.dp)
-                .padding(4.dp)
-                .drawBehind {
-                    if (conversation.hasActiveStory) {
-                        rotate(rotateAnimation) {
-                            drawCircle(brush, style = Stroke(20f))
-                        }
-                    }
-                }
-                .clip(CircleShape)
+            modifier = if (conversation.hasActiveStory)
+                defaultImageModifier.clickable
+                {
+
+                } else defaultImageModifier
         )
         Column(
             modifier = Modifier.padding(horizontal = 8.dp),

@@ -9,5 +9,6 @@ data class Conversation(
     val timestamp: String = "",
     val hasActiveStory: Boolean = false,
     val hasUnreadMessage: Boolean = false,
-    val isActive: Boolean = false
+    val isActive: Boolean = false,
+    val messageList: List<Message> = listOf()
 )

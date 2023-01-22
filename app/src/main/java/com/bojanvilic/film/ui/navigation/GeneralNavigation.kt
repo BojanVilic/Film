@@ -7,8 +7,8 @@ import com.bojanvilic.film.conversationList
 import com.bojanvilic.film.ui.TopLevelDestinations
 import com.bojanvilic.film.ui.components.ConversationsList
 
-fun NavGraphBuilder.allScreen(navController: NavHostController) {
-    composable(TopLevelDestinations.All.route) {
+fun NavGraphBuilder.generalScreen(navController: NavHostController) {
+    composable(TopLevelDestinations.General.route) {
         ConversationsList(
             conversationsList = conversationList,
             onChatClicked = { chatId ->

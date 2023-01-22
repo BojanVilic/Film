@@ -5,13 +5,17 @@ package com.bojanvilic.film.ui.components
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,9 +32,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bojanvilic.film.R
+import com.bojanvilic.film.previewMessageList
 import com.bojanvilic.film.theme.AppTheme
 import com.bojanvilic.film.ui.ChatViewModel
 import com.bojanvilic.film.ui.models.Conversation
+import com.bojanvilic.film.ui.models.Message
 import com.bojanvilic.film.ui.models.MessageType
 
 @Composable
@@ -39,7 +45,7 @@ fun ChatScreen(
     onBackClicked: () -> Unit
 ) {
     val conversation = chatViewModel.chat.collectAsState(initial = Conversation())
-
+    val messageList = chatViewModel.messageList
 
     Scaffold(
         topBar = {
@@ -53,7 +59,8 @@ fun ChatScreen(
     ) { paddingValues ->
         ChatContent(
             paddingValues = paddingValues,
-            conversation = conversation.value
+            conversation = conversation.value,
+            messageList = messageList
         )
     }
 }
@@ -61,9 +68,110 @@ fun ChatScreen(
 @Composable
 fun ChatContent(
     paddingValues: PaddingValues,
-    conversation: Conversation
+    conversation: Conversation,
+    messageList: List<Message>
 ) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(messageList.size) {
+        listState.animateScrollToItem(messageList.size)
+    }
 
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(paddingValues = paddingValues),
+        state = listState
+    ) {
+        items(messageList.size) {
+            if (messageList[it].isUserSender)
+                RightSideMessage(message = messageList[it])
+            else
+                LeftSideMessage(
+                    message = messageList[it],
+                    attachProfilePhoto = it > 0 && !messageList[it-1].isUserSender
+                )
+        }
+    }
+}
+
+@Composable
+fun LeftSideMessage(
+    message: Message,
+    attachProfilePhoto: Boolean = false
+) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 8.dp)) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 4.dp)
+                .fillMaxWidth(0.8f)
+                .align(Alignment.TopStart),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Row(
+                verticalAlignment = Alignment.Bottom
+            ) {
+                if (attachProfilePhoto) {
+                    Image(
+                        painter = painterResource(id = R.drawable.kitten),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .size(36.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Spacer(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .size(36.dp)
+                    )
+                }
+                Text(
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                        .padding(8.dp),
+                    text = message.text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black
+                )
+
+            }
+        }
+    }
+}
+
+@Composable
+fun RightSideMessage(message: Message) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 8.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(vertical = 4.dp)
+                .align(Alignment.TopEnd),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = message.text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -175,6 +283,25 @@ fun ChatTopBarPreview() {
                 isActive = true
             ),
             onBackClicked = {}
+        )
+    }
+}
+@Preview
+@Composable
+fun RightSideMessagePreview() {
+    AppTheme {
+        RightSideMessage(
+            message = previewMessageList[0]
+        )
+    }
+}
+
+@Preview
+@Composable
+fun LeftSideMessagePreview() {
+    AppTheme {
+        LeftSideMessage(
+            message = previewMessageList[1]
         )
     }
 }
