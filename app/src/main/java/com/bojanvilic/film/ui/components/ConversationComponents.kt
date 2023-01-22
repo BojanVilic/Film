@@ -2,6 +2,7 @@ package com.bojanvilic.film.ui.components
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bojanvilic.film.R
@@ -74,25 +76,50 @@ fun ConversationsListItem(conversation: Conversation) {
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = if (conversation.hasActiveStory)
-                defaultModifier.border(3.dp, color, CircleShape).clickable {
+                defaultModifier
+                    .border(3.dp, color, CircleShape)
+                    .clickable {
 
-                } else defaultModifier
+                    } else defaultModifier
         )
         Column(
             modifier = Modifier.padding(horizontal = 8.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(
-                text = conversation.name,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Row {
+                Text(
+                    text = conversation.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                if (conversation.isActive) {
+                    Canvas(
+                        modifier = Modifier
+                            .align(Alignment.Top)
+                            .padding(horizontal = 4.dp, vertical = 4.dp)
+                            .size(6.dp),
+                        onDraw = {
+                            drawCircle(color = Color(0xFF9bbc3c))
+                        })
+                }
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
+
+                val previousMessageText =
+                    if (conversation.previousMessageType == MessageType.VoiceMessage ||
+                        conversation.previousMessageType == MessageType.Image) {
+                        "Sent ${conversation.previousMessageType.stringValue}." + " "
+                    } else {
+                        conversation.previousMessageText + " "
+                    }
+
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = "Sent ${conversation.previousMessageType.stringValue}. "
+                    fontWeight = if (conversation.hasUnreadMessage) FontWeight.Black else FontWeight.Normal,
+                    text = previousMessageText
                 )
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = if (conversation.hasUnreadMessage) FontWeight.Black else FontWeight.Normal,
                     text = conversation.timestamp
                 )
             }

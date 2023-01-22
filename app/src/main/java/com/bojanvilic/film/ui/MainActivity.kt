@@ -52,37 +52,45 @@ val conversationList: List<Conversation> = listOf(
         image = "",
         name = "Tanja Boskovic",
         previousMessageType = MessageType.VoiceMessage,
-        timestamp = "13:45"
+        timestamp = "13:45",
+        hasUnreadMessage = true,
+        isActive = true
     ),
     Conversation(
         image = "",
         name = "Lidija",
         previousMessageType = MessageType.Image,
-        timestamp = "14:45"
+        timestamp = "14:45",
+        previousMessageText = "Eo me."
     ),
     Conversation(
         image = "",
         name = "Nino",
         previousMessageType = MessageType.Text,
-        timestamp = "09:45"
+        timestamp = "09:45",
+        previousMessageText = "Kako je u Londonetu?"
     ),
     Conversation(
         image = "",
         name = "Marijana Nikolic",
         previousMessageType = MessageType.VoiceMessage,
-        timestamp = "16:45"
+        timestamp = "16:45",
+        hasUnreadMessage = true,
+        isActive = true
     ),
     Conversation(
         image = "",
         name = "Bole",
         previousMessageType = MessageType.Image,
         timestamp = "21:35",
-        hasActiveStory = true
+        hasActiveStory = true,
+        isActive = true
     ),
     Conversation(
         image = "",
         name = "Mile",
         previousMessageType = MessageType.Text,
-        timestamp = "22:25"
+        timestamp = "22:25",
+        previousMessageText = "Poslao sam ti poruku."
     )
 )

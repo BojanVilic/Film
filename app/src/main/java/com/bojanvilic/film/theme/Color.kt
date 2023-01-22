@@ -2,9 +2,9 @@ package com.bojanvilic.film.theme
 
 import androidx.compose.ui.graphics.Color
 
-val light_theme_primary = Color(0xff157d76)
-val light_theme_secondary = Color(0xff13baae)
-val light_theme_tertiary = Color(0xFF800000)
+val light_theme_primary = Color(0xff28757d)
+val light_theme_secondary = Color(0xff95c4c7)
+val light_theme_tertiary = Color(0xFF9bbc3c)
 val light_theme_error = Color(0xFFFFB4AB)
 val light_theme_errorContainer = Color(0xFF93000A)
 val light_theme_onError = Color(0xFF690005)
