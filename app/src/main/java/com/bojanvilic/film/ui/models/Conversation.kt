@@ -5,7 +5,7 @@ data class Conversation(
     val image: String = "",
     val name: String = "",
     val previousMessageText: String = "",
-    val previousMessageType: MessageType,
+    val previousMessageType: MessageType = MessageType.Text,
     val timestamp: String = "",
     val hasActiveStory: Boolean = false,
     val hasUnreadMessage: Boolean = false,
