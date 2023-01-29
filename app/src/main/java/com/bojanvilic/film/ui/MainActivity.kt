@@ -3,6 +3,7 @@ package com.bojanvilic.film.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -20,6 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val chatViewModel: ChatViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -28,6 +32,10 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val backstackEntry = navController.currentBackStackEntryAsState()
                 val currentScreen: TopLevelDestinations? = TopLevelDestinations.fromRoute(backstackEntry.value?.destination?.route)
+
+                if (backstackEntry.value?.destination?.route == "chat_route") {
+                    chatViewModel.readMessage()
+                }
 
                 Scaffold(
                     topBar = {
@@ -42,7 +50,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { paddingValues ->
-                    AppNavHost(navController, modifier = Modifier.padding(paddingValues))
+                    AppNavHost(chatViewModel, navController, modifier = Modifier.padding(paddingValues))
                 }
             }
         }
@@ -51,6 +59,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppNavHost(
+    chatViewModel: ChatViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -59,10 +68,10 @@ fun AppNavHost(
         startDestination = TopLevelDestinations.All.route,
         modifier = modifier
     ) {
-        allScreen(navController)
-        generalScreen(navController)
-        requestsScreen(navController)
-        chatScreen(onBackClicked = { navController.navigateUp() })
+        allScreen(navController, chatViewModel)
+        generalScreen(navController, chatViewModel)
+        requestsScreen(navController, chatViewModel)
+        chatScreen(onBackClicked = { navController.navigateUp() }, chatViewModel)
         storyScreen(onBackClicked = { navController.navigateUp() })
     }
 }

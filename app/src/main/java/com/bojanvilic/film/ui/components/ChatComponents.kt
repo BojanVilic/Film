@@ -2,6 +2,7 @@
 
 package com.bojanvilic.film.ui.components
 
+import android.media.MediaPlayer
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -21,16 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import com.bojanvilic.film.R
 import com.bojanvilic.film.previewMessageList
 import com.bojanvilic.film.theme.AppTheme
@@ -46,6 +48,12 @@ fun ChatScreen(
 ) {
     val conversation = chatViewModel.chat.collectAsState(initial = Conversation())
     val messageList = chatViewModel.messageList
+
+    ComposableLifecycle { _, event ->
+        if (event == Lifecycle.Event.ON_RESUME) {
+            chatViewModel.readMessage()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -156,6 +164,10 @@ fun MessageItem(
                     )
                 }
 
+            var audioPlaying by remember {
+                mutableStateOf(false)
+            }
+
             Column(
                 horizontalAlignment = Alignment.End
             ) {
@@ -193,6 +205,33 @@ fun MessageItem(
                             painter = painterResource(id = R.drawable.kitten),
                             contentDescription = null
                         )
+                    }
+                    if (message.messageType == MessageType.VoiceMessage) {
+                        Row(
+                            modifier = messageModifier,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            val context = LocalContext.current
+
+                            Image(
+                                modifier = Modifier
+                                    .height(48.dp),
+                                painter = painterResource(id = R.drawable.audio_message),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth,
+                            )
+                            Image(
+                                modifier = Modifier
+                                    .clickable {
+                                        audioPlaying = !audioPlaying
+                                        val mediaPlayer = MediaPlayer.create(context, R.raw.zvonkec)
+                                        mediaPlayer.start()
+                                    },
+                                painter = painterResource(id = if (audioPlaying) R.drawable.ic_baseline_pause_24 else R.drawable.ic_baseline_play_arrow_24),
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
                 AnimatedVisibility(visible = message.liked) {

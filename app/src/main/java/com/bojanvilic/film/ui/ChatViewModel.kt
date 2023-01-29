@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.bojanvilic.film.conversationList
 import com.bojanvilic.film.ui.models.Conversation
 import com.bojanvilic.film.ui.models.Message
 import com.bojanvilic.film.ui.models.MessageType
@@ -96,15 +95,111 @@ class ChatViewModel @Inject constructor(
             )
         ))
 
+    var conversationList: List<Conversation> by mutableStateOf(listOf(
+        Conversation(
+            id = 0,
+            image = "",
+            name = "Tanja Bošković",
+            previousMessageType = MessageType.Image,
+            timestamp = "16:01",
+            hasUnreadMessage = true,
+            isActive = true
+        ),
+        Conversation(
+            id = 1,
+            image = "",
+            name = "Nino",
+            previousMessageType = MessageType.Text,
+            timestamp = "Fri",
+            previousMessageText = "Eo me."
+        ),
+        Conversation(
+            id = 2,
+            image = "",
+            name = "Irina Dujaković",
+            previousMessageType = MessageType.Image,
+            timestamp = "Thu",
+        ),
+        Conversation(
+            id = 3,
+            image = "",
+            name = "Lidija Johnson",
+            previousMessageType = MessageType.Text,
+            timestamp = "16. Dec",
+            hasUnreadMessage = false,
+            isActive = true,
+            previousMessageText = "Kako je u...",
+            hasActiveStory = true
+        ),
+        Conversation(
+            id = 4,
+            name = "Snežana Maletin",
+            previousMessageType = MessageType.Text,
+            timestamp = "1. Dec",
+            hasActiveStory = false,
+            isActive = true,
+            previousMessageText = "Hvala!! <3"
+        ),
+        Conversation(
+            id = 5,
+            name = "Rastko Popović",
+            previousMessageType = MessageType.Text,
+            timestamp = "Nekada davno",
+            previousMessageText = "Ova poruka mozda...",
+            hasActiveStory = true
+        ),
+        Conversation(
+            id = 6,
+            image = "",
+            name = "Bole",
+            previousMessageType = MessageType.Image,
+            timestamp = "21:35",
+            hasActiveStory = false,
+            isActive = true
+        ),
+        Conversation(
+            id = 7,
+            image = "",
+            name = "Mile",
+            previousMessageType = MessageType.Text,
+            timestamp = "22:25",
+            previousMessageText = "Poslao sam ti poruku."
+        ),
+        Conversation(
+            id = 8,
+            image = "",
+            name = "Bole",
+            previousMessageType = MessageType.Image,
+            timestamp = "21:35",
+            hasActiveStory = true,
+            isActive = true
+        ),
+        Conversation(
+            id = 9,
+            image = "",
+            name = "Mile",
+            previousMessageType = MessageType.Text,
+            timestamp = "22:25",
+            previousMessageText = "Poslao sam ti poruku."
+        )
+    ))
+
     init {
         Handler(Looper.getMainLooper()).postDelayed({
             messageList = messageList.plus(Message(
                 id = 9,
-                messageType = MessageType.Text,
+                messageType = MessageType.VoiceMessage,
                 isUserSender = false,
-                text = "Najnovija poruka u vasem gradu!",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ))
+
+            conversationList = conversationList.map {
+                if (it.id == 0) {
+                    it.copy(previousMessageType = MessageType.VoiceMessage)
+                } else {
+                    it
+                }
+            }
         }, 3000)
     }
 
@@ -112,6 +207,16 @@ class ChatViewModel @Inject constructor(
         messageList = messageList.map {
             if (it.id == id) {
                 it.copy(liked = !it.liked)
+            } else {
+                it
+            }
+        }
+    }
+
+    fun readMessage() {
+        conversationList = conversationList.map {
+            if (it.id == 0) {
+                it.copy(hasUnreadMessage = false)
             } else {
                 it
             }
