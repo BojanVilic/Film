@@ -22,7 +22,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     val chat: Flow<Conversation> =
@@ -31,7 +31,7 @@ class ChatViewModel @Inject constructor(
                 flowOf(conversationList[id.toInt()])
             }
 
-    var messageList by mutableStateOf(
+    var messageListTanja by mutableStateOf(
         listOf(
             Message(
                 id = 0,
@@ -92,6 +92,37 @@ class ChatViewModel @Inject constructor(
                 messageType = MessageType.Image,
                 isUserSender = false,
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
+            )
+        ))
+
+    var messageListLidija by mutableStateOf(
+        listOf(
+            Message(
+                id = 0,
+                messageType = MessageType.Image,
+                isUserSender = true,
+                timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
+            ),
+            Message(
+                id = 1,
+                messageType = MessageType.Text,
+                isUserSender = true,
+                text = "Vaza je prelepaaa,\nhvala ti do neba!! ❤",
+                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
+            ),
+            Message(
+                id = 2,
+                messageType = MessageType.Text,
+                isUserSender = false,
+                text = "Love you guyss \uD83D\uDE18 \uD83D\uDE18",
+                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
+            ),
+            Message(
+                id = 3,
+                messageType = MessageType.Text,
+                isUserSender = true,
+                text = "Kako je u engleskoj?\nHocete dolaziti kod nas?",
+                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             )
         ))
 
@@ -184,27 +215,8 @@ class ChatViewModel @Inject constructor(
         )
     ))
 
-    init {
-        Handler(Looper.getMainLooper()).postDelayed({
-            messageList = messageList.plus(Message(
-                id = 9,
-                messageType = MessageType.VoiceMessage,
-                isUserSender = false,
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
-            ))
-
-            conversationList = conversationList.map {
-                if (it.id == 0) {
-                    it.copy(previousMessageType = MessageType.VoiceMessage)
-                } else {
-                    it
-                }
-            }
-        }, 3000)
-    }
-
     fun updateMessageAfterLike(id: Int) {
-        messageList = messageList.map {
+        messageListTanja = messageListTanja.map {
             if (it.id == id) {
                 it.copy(liked = !it.liked)
             } else {
@@ -221,5 +233,32 @@ class ChatViewModel @Inject constructor(
                 it
             }
         }
+    }
+
+    fun sendVoiceMessage() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (messageListTanja.last().messageType != MessageType.VoiceMessage) {
+                messageListTanja = messageListTanja.plus(
+                    Message(
+                        id = 9,
+                        messageType = MessageType.VoiceMessage,
+                        isUserSender = false,
+                        timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
+                    )
+                )
+
+                conversationList = conversationList.map {
+                    if (it.id == 0) {
+                        it.copy(previousMessageType = MessageType.VoiceMessage)
+                    } else {
+                        it
+                    }
+                }
+            }
+        }, 2000)
+    }
+
+    fun setChatId(id: String) {
+        savedStateHandle[chatId] = id
     }
 }

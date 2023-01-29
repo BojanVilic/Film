@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
@@ -29,6 +30,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,12 +49,17 @@ fun ChatScreen(
     onBackClicked: () -> Unit
 ) {
     val conversation = chatViewModel.chat.collectAsState(initial = Conversation())
-    val messageList = chatViewModel.messageList
+    val messageList = if (conversation.value.id == 0) chatViewModel.messageListTanja else chatViewModel.messageListLidija
 
     ComposableLifecycle { _, event ->
         if (event == Lifecycle.Event.ON_RESUME) {
             chatViewModel.readMessage()
+            chatViewModel.sendVoiceMessage()
         }
+    }
+
+    var messageText by remember {
+        mutableStateOf("")
     }
 
     Scaffold(
@@ -73,22 +80,24 @@ fun ChatScreen(
             ) {
                 OutlinedTextField(
                     modifier = Modifier
-                        .height(50.dp)
-                        .fillMaxWidth(),
-                    value = "",
-                    placeholder = { Text(text = "Search") },
-                    onValueChange = {},
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    value = messageText,
+                    placeholder = { Text(text = "Aa") },
+                    onValueChange = { messageText = it },
                     trailingIcon = {
                         Image(
-                            painter = painterResource(id = R.drawable.search_icon),
-                            contentDescription = null
+                            painter = painterResource(id = R.drawable.ic_baseline_send_24),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary)
                         )
                     },
                     shape = CircleShape,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.primary
-                    )
+                    ),
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
                 )
             }
         }
