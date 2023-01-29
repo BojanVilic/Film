@@ -35,54 +35,63 @@ class ChatViewModel @Inject constructor(
     var messageList by mutableStateOf(
         listOf(
             Message(
+                id = 0,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Probna poruka sa jedne strane",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
+                id = 1,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Druga poruka sa druge strane",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
+                id = 2,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Nekako i slika da se namesti",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
+                id = 3,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Nekako i slika da se namesti",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
+                id = 4,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Druga poruka sa druge strane",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
+                id = 5,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane ",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
+                id = 6,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Probna poruka sa jedne strane",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
+                id = 7,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane ",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
+                id = 8,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -93,11 +102,22 @@ class ChatViewModel @Inject constructor(
     init {
         Handler(Looper.getMainLooper()).postDelayed({
             messageList = messageList.plus(Message(
+                id = 9,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Najnovija poruka u vasem gradu!",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ))
         }, 3000)
+    }
+
+    fun updateMessageAfterLike(id: Int) {
+        messageList = messageList.map {
+            if (it.id == id) {
+                it.copy(liked = !it.liked)
+            } else {
+                it
+            }
+        }
     }
 }

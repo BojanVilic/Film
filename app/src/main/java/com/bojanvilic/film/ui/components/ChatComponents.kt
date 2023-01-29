@@ -2,11 +2,13 @@
 
 package com.bojanvilic.film.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,10 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +25,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,12 +55,43 @@ fun ChatScreen(
                     onBackClicked()
                 }
             )
+        },
+        bottomBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth(),
+                    value = "",
+                    placeholder = { Text(text = "Search") },
+                    onValueChange = {},
+                    trailingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.search_icon),
+                            contentDescription = null
+                        )
+                    },
+                    shape = CircleShape,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary
+                    )
+                )
+            }
         }
     ) { paddingValues ->
         ChatContent(
             paddingValues = paddingValues,
             conversation = conversation.value,
-            messageList = messageList
+            messageList = messageList,
+            onMessageLiked = {
+                chatViewModel.updateMessageAfterLike(it)
+            }
         )
     }
 }
@@ -69,7 +100,8 @@ fun ChatScreen(
 fun ChatContent(
     paddingValues: PaddingValues,
     conversation: Conversation,
-    messageList: List<Message>
+    messageList: List<Message>,
+    onMessageLiked: (Int) -> Unit
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(messageList.size) {
@@ -84,11 +116,19 @@ fun ChatContent(
     ) {
         items(messageList.size) {
             if (messageList[it].isUserSender)
-                RightSideMessage(message = messageList[it])
+                RightSideMessage(
+                    message = messageList[it],
+                    onMessageLiked = { messageId ->
+                        onMessageLiked(messageId)
+                    }
+                )
             else
                 LeftSideMessage(
                     message = messageList[it],
-                    attachProfilePhoto = it > 0 && !messageList[it-1].isUserSender
+                    attachProfilePhoto = it > 0 && !messageList[it-1].isUserSender,
+                    onMessageLiked = { messageId ->
+                        onMessageLiked(messageId)
+                    }
                 )
         }
     }
@@ -97,7 +137,8 @@ fun ChatContent(
 @Composable
 fun LeftSideMessage(
     message: Message,
-    attachProfilePhoto: Boolean = false
+    attachProfilePhoto: Boolean = false,
+    onMessageLiked: (Int) -> Unit
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -110,43 +151,65 @@ fun LeftSideMessage(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Row(
-                verticalAlignment = Alignment.Bottom
+            Column(
+                horizontalAlignment = Alignment.End
             ) {
-                if (attachProfilePhoto) {
-                    Image(
-                        painter = painterResource(id = R.drawable.kitten),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
+                Row(
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    if (attachProfilePhoto) {
+                        Image(
+                            painter = painterResource(id = R.drawable.kitten),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(36.dp)
+                                .clip(CircleShape)
+                        )
+                    } else {
+                        Spacer(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(36.dp)
+                        )
+                    }
+                    Text(
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(36.dp)
-                            .clip(CircleShape)
+                            .clip(MaterialTheme.shapes.medium)
+                            .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                            .padding(8.dp)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onDoubleTap = {
+                                        onMessageLiked(message.id)
+                                    }
+                                )
+                            },
+                        text = message.text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
                     )
-                } else {
-                    Spacer(
+
+                }
+                AnimatedVisibility(visible = message.liked) {
+                    Image(
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(36.dp)
+                            .size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_heart),
+                        contentDescription = null
                     )
                 }
-                Text(
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(MaterialTheme.colorScheme.onSurfaceVariant)
-                        .padding(8.dp),
-                    text = message.text,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black
-                )
-
             }
         }
     }
 }
 
 @Composable
-fun RightSideMessage(message: Message) {
+fun RightSideMessage(
+    message: Message,
+    onMessageLiked: (Int) -> Unit
+) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 8.dp)) {
@@ -158,17 +221,36 @@ fun RightSideMessage(message: Message) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            Box(
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(8.dp)
+            Column(
+                horizontalAlignment = Alignment.End
             ) {
-                Text(
-                    text = message.text,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White
-                )
+                Box(
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(8.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onDoubleTap = {
+                                    onMessageLiked(message.id)
+                                }
+                            )
+                        }
+                ) {
+                    Text(
+                        text = message.text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White
+                    )
+                }
+                AnimatedVisibility(visible = message.liked) {
+                    Image(
+                        modifier = Modifier
+                            .size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_heart),
+                        contentDescription = null
+                    )
+                }
             }
         }
     }
@@ -291,7 +373,8 @@ fun ChatTopBarPreview() {
 fun RightSideMessagePreview() {
     AppTheme {
         RightSideMessage(
-            message = previewMessageList[0]
+            message = previewMessageList[0],
+            onMessageLiked = {}
         )
     }
 }
@@ -301,7 +384,8 @@ fun RightSideMessagePreview() {
 fun LeftSideMessagePreview() {
     AppTheme {
         LeftSideMessage(
-            message = previewMessageList[1]
+            message = previewMessageList[1],
+            onMessageLiked = {}
         )
     }
 }
