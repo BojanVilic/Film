@@ -72,6 +72,6 @@ fun AppNavHost(
         generalScreen(navController, chatViewModel)
         requestsScreen(navController, chatViewModel)
         chatScreen(onBackClicked = { navController.navigateUp() }, chatViewModel)
-        storyScreen(onBackClicked = { navController.navigateUp() })
+        storyScreen(navController, chatViewModel)
     }
 }

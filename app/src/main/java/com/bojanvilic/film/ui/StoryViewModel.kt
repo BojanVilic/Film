@@ -13,10 +13,15 @@ import javax.inject.Inject
 class StoryViewModel @Inject constructor(): ViewModel() {
 
     var progressBarValue by mutableStateOf(0f)
+    var progressBarValue2 by mutableStateOf(0f)
 
     init {
         Handler(Looper.getMainLooper()).postDelayed({
             progressBarValue = 1f
         }, 500)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            progressBarValue2 = 1f
+        }, 8500)
     }
 }
