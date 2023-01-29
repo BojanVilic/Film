@@ -132,9 +132,10 @@ fun ChatContent(
         state = listState
     ) {
         items(messageList.size) {
+
             MessageItem(
                 message = messageList[it],
-                attachProfilePhoto = it > 0 && !messageList[it-1].isUserSender && messageList[it].isUserSender.not(),
+                attachProfilePhoto = messageList[it].isUserSender.not(),
                 onMessageLiked = { messageId ->
                     onMessageLiked(messageId)
                 }
@@ -375,7 +376,8 @@ fun LeftSideMessagePreview() {
     AppTheme {
         MessageItem(
             message = previewMessageList[1],
-            onMessageLiked = {}
+            onMessageLiked = {},
+            attachProfilePhoto = true
         )
     }
 }

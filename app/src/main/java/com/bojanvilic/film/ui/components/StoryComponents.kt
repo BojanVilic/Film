@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.bojanvilic.film.ui.components
 
 import androidx.compose.animation.core.LinearEasing
@@ -9,19 +11,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bojanvilic.film.R
 import com.bojanvilic.film.theme.AppTheme
@@ -95,14 +99,15 @@ fun StoryContent(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .size(36.dp)
+                        .size(48.dp)
                         .clip(CircleShape)
                         .clickable {
                             onImageClicked()
                         }
                 )
                 Text(
-                    text = "Lidija Johnson"
+                    text = "Lidija Johnson",
+                    fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
@@ -120,6 +125,32 @@ fun StoryContent(
             painter = painterResource(id = R.drawable.kitten),
             contentDescription = null
         )
+        Row(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .padding(horizontal = 8.dp, vertical = 16.dp),
+                value = "",
+                placeholder = { Text(text = "Send message", color = Color.DarkGray) },
+                onValueChange = {  },
+                shape = CircleShape,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary
+                ),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+            )
+            Image(
+                modifier = Modifier
+                    .padding(vertical = 16.dp),
+                painter = painterResource(id = R.drawable.ic_heart),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary)
+            )
+        }
     }
 }
 
