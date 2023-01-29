@@ -115,27 +115,19 @@ fun ChatContent(
         state = listState
     ) {
         items(messageList.size) {
-            if (messageList[it].isUserSender)
-                RightSideMessage(
-                    message = messageList[it],
-                    onMessageLiked = { messageId ->
-                        onMessageLiked(messageId)
-                    }
-                )
-            else
-                LeftSideMessage(
-                    message = messageList[it],
-                    attachProfilePhoto = it > 0 && !messageList[it-1].isUserSender,
-                    onMessageLiked = { messageId ->
-                        onMessageLiked(messageId)
-                    }
-                )
+            MessageItem(
+                message = messageList[it],
+                attachProfilePhoto = it > 0 && !messageList[it-1].isUserSender && messageList[it].isUserSender.not(),
+                onMessageLiked = { messageId ->
+                    onMessageLiked(messageId)
+                }
+            )
         }
     }
 }
 
 @Composable
-fun LeftSideMessage(
+fun MessageItem(
     message: Message,
     attachProfilePhoto: Boolean = false,
     onMessageLiked: (Int) -> Unit
@@ -147,10 +139,23 @@ fun LeftSideMessage(
             modifier = Modifier
                 .padding(vertical = 4.dp)
                 .fillMaxWidth(0.8f)
-                .align(Alignment.TopStart),
+                .align(if (message.isUserSender) Alignment.TopEnd else Alignment.TopStart),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = if (message.isUserSender) Arrangement.End else Arrangement.Start
         ) {
+
+            val messageModifier = Modifier
+                .clip(MaterialTheme.shapes.medium)
+                .background(if (message.isUserSender) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
+                .padding(8.dp)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onDoubleTap = {
+                            onMessageLiked(message.id)
+                        }
+                    )
+                }
+
             Column(
                 horizontalAlignment = Alignment.End
             ) {
@@ -174,74 +179,21 @@ fun LeftSideMessage(
                                 .size(36.dp)
                         )
                     }
-                    Text(
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.medium)
-                            .background(MaterialTheme.colorScheme.onSurfaceVariant)
-                            .padding(8.dp)
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onDoubleTap = {
-                                        onMessageLiked(message.id)
-                                    }
-                                )
-                            },
-                        text = message.text,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Black
-                    )
-
-                }
-                AnimatedVisibility(visible = message.liked) {
-                    Image(
-                        modifier = Modifier
-                            .size(16.dp),
-                        painter = painterResource(id = R.drawable.ic_heart),
-                        contentDescription = null
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun RightSideMessage(
-    message: Message,
-    onMessageLiked: (Int) -> Unit
-) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 8.dp)) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .padding(vertical = 4.dp)
-                .align(Alignment.TopEnd),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            Column(
-                horizontalAlignment = Alignment.End
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(8.dp)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onDoubleTap = {
-                                    onMessageLiked(message.id)
-                                }
-                            )
-                        }
-                ) {
-                    Text(
-                        text = message.text,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White
-                    )
+                    if (message.messageType == MessageType.Text) {
+                        Text(
+                            modifier = messageModifier,
+                            text = message.text,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (message.isUserSender) Color.White else Color.Black
+                        )
+                    }
+                    if (message.messageType == MessageType.Image) {
+                        Image(
+                            modifier = messageModifier,
+                            painter = painterResource(id = R.drawable.kitten),
+                            contentDescription = null
+                        )
+                    }
                 }
                 AnimatedVisibility(visible = message.liked) {
                     Image(
@@ -368,22 +320,12 @@ fun ChatTopBarPreview() {
         )
     }
 }
-@Preview
-@Composable
-fun RightSideMessagePreview() {
-    AppTheme {
-        RightSideMessage(
-            message = previewMessageList[0],
-            onMessageLiked = {}
-        )
-    }
-}
 
 @Preview
 @Composable
 fun LeftSideMessagePreview() {
     AppTheme {
-        LeftSideMessage(
+        MessageItem(
             message = previewMessageList[1],
             onMessageLiked = {}
         )
