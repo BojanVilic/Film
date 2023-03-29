@@ -16,8 +16,10 @@ fun NavGraphBuilder.storyScreen(navController: NavHostController, chatViewModel:
         StoryScreen(
             storyUri = storyUri,
             onImageClicked = {
-            chatViewModel.setChatId("3")
-            navController.navigate("$chatRoute/3")
-        })
+                chatViewModel.setChatId("3")
+                navController.navigate("$chatRoute/3")
+            },
+            navController = navController
+        )
     }
 }

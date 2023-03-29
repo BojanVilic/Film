@@ -27,16 +27,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.bojanvilic.film.R
 import com.bojanvilic.film.theme.AppTheme
 import com.bojanvilic.film.ui.StoryViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
 fun StoryScreen(
     storyUri: Uri,
     storyViewModel: StoryViewModel = hiltViewModel(),
-    onImageClicked: () -> Unit
+    onImageClicked: () -> Unit,
+    navController: NavController
 ) {
 
     Surface {
@@ -51,6 +54,11 @@ fun StoryScreen(
             onStoryClicked = {
             }
         )
+    }
+
+    LaunchedEffect(Unit) {
+        delay(24500)
+        navController.popBackStack()
     }
 }
 
