@@ -2,6 +2,7 @@
 
 package com.bojanvilic.film.ui.components
 
+import android.net.Uri
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -13,8 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,22 +31,27 @@ import com.bojanvilic.film.R
 import com.bojanvilic.film.theme.AppTheme
 import com.bojanvilic.film.ui.StoryViewModel
 
+
 @Composable
 fun StoryScreen(
+    storyUri: Uri,
     storyViewModel: StoryViewModel = hiltViewModel(),
     onImageClicked: () -> Unit
 ) {
 
     Surface {
-//        StoryContent(
-//            progressBarValue = storyViewModel.progressBarValue,
-//            progressBarValue2 = storyViewModel.progressBarValue2,
-//            onImageClicked = {
-//                onImageClicked()
-//            }
-//        )
-
-        VideoView(videoUri = "https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4")
+        StoryContent(
+            progressBarValue = storyViewModel.progressBarValue,
+            progressBarValue2 = storyViewModel.progressBarValue2,
+            progressBarValue3 = storyViewModel.progressBarValue3,
+            onImageClicked = {
+                onImageClicked()
+            },
+            storyUri = storyUri,
+            onStoryClicked = {
+                storyViewModel.onStoryClicked()
+            }
+        )
     }
 }
 
@@ -54,18 +59,26 @@ fun StoryScreen(
 fun StoryContent(
     progressBarValue: Float,
     progressBarValue2: Float,
-    onImageClicked: () -> Unit
+    progressBarValue3: Float,
+    onImageClicked: () -> Unit,
+    storyUri: Uri,
+    onStoryClicked: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+
         val progressAnimation by animateFloatAsState(
             targetValue = progressBarValue,
-            animationSpec = tween(durationMillis = 8000, easing = LinearEasing),
+            animationSpec = tween(durationMillis = 8000, easing = LinearEasing)
         )
         val progressAnimation2 by animateFloatAsState(
             targetValue = progressBarValue2,
-            animationSpec = tween(durationMillis = 8000, easing = LinearEasing),
+            animationSpec = tween(durationMillis = 8000, easing = LinearEasing)
+        )
+        val progressAnimation3 by animateFloatAsState(
+            targetValue = progressBarValue3,
+            animationSpec = tween(durationMillis = 8000, easing = LinearEasing)
         )
 
         Column {
@@ -75,7 +88,7 @@ fun StoryContent(
             ) {
                 LinearProgressIndicator(
                     modifier = Modifier
-                        .fillMaxWidth(0.5f)
+                        .weight(1f)
                         .padding(end = 2.dp)
                         .clip(RoundedCornerShape(20.dp)),
                     progress = progressAnimation
@@ -83,10 +96,18 @@ fun StoryContent(
 
                 LinearProgressIndicator(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .weight(1f)
                         .padding(start = 2.dp)
                         .clip(RoundedCornerShape(20.dp)),
                     progress = progressAnimation2
+                )
+
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 2.dp)
+                        .clip(RoundedCornerShape(20.dp)),
+                    progress = progressAnimation3
                 )
             }
             Row(
@@ -94,7 +115,7 @@ fun StoryContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.kitten),
+                    painter = painterResource(id = R.drawable.lidija),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -118,13 +139,39 @@ fun StoryContent(
                     contentDescription = null
                 )
             }
+            if (progressAnimation != 0f && progressAnimation != 1f) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            onStoryClicked()
+                        },
+                    painter = painterResource(id = R.drawable.story_1),
+                    contentDescription = null
+                )
+            }
+            if (progressAnimation2 != 0f && progressAnimation2 != 1f) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            onStoryClicked()
+                        },
+                    painter = painterResource(id = R.drawable.story_2),
+                    contentDescription = null
+                )
+            }
+            if (progressAnimation3 != 0f && progressAnimation3 != 1f) {
+                VideoView(
+                    modifier = Modifier
+                        .padding(top = 42.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.8f)
+                        .background(Color.Black),
+                    videoUri = storyUri.toString()
+                )
+            }
         }
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(id = R.drawable.kitten),
-            contentDescription = null
-        )
         Row(
             modifier = Modifier.align(Alignment.BottomCenter),
             verticalAlignment = Alignment.CenterVertically
@@ -161,7 +208,10 @@ fun StoryContentPreview() {
         StoryContent(
             0.5f,
             0.8f,
-            onImageClicked = {}
+            0.5f,
+            onImageClicked = {},
+            storyUri = Uri.EMPTY,
+            onStoryClicked = {}
         )
     }
 }

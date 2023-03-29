@@ -161,7 +161,7 @@ fun ConversationsListItemPreview() {
         ConversationsListItem(
             conversation = Conversation(
                 image = R.drawable.kitten,
-                name = "Tanja Boskovic",
+                name = "Tanja Dragićević",
                 previousMessageType = MessageType.VoiceMessage,
                 timestamp = "15:30",
                 hasActiveStory = true

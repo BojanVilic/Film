@@ -14,6 +14,7 @@ class StoryViewModel @Inject constructor(): ViewModel() {
 
     var progressBarValue by mutableStateOf(0f)
     var progressBarValue2 by mutableStateOf(0f)
+    var progressBarValue3 by mutableStateOf(0f)
 
     init {
         Handler(Looper.getMainLooper()).postDelayed({
@@ -23,5 +24,9 @@ class StoryViewModel @Inject constructor(): ViewModel() {
         Handler(Looper.getMainLooper()).postDelayed({
             progressBarValue2 = 1f
         }, 8500)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            progressBarValue3 = 1f
+        }, 16500)
     }
 }

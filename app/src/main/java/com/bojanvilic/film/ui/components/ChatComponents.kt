@@ -5,6 +5,7 @@ package com.bojanvilic.film.ui.components
 import android.media.MediaPlayer
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -214,14 +215,30 @@ fun MessageItem(
                     if (message.messageType == MessageType.Image) {
                         Image(
                             modifier = messageModifier,
-                            painter = painterResource(id = R.drawable.kitten),
+                            painter = painterResource(id = message.image),
                             contentDescription = null
                         )
                     }
                     if (message.messageType == MessageType.VoiceMessage) {
+
+                        val bgColorTransition = animateColorAsState(
+                            targetValue = if (audioPlaying) MaterialTheme.colorScheme.primary else if (message.isUserSender) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            animationSpec = tween(durationMillis = if (audioPlaying) 4000 else 0)
+                        )
+
                         Row(
-                            modifier = messageModifier,
-                            verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(bgColorTransition.value)
+                                .padding(8.dp)
+                                .pointerInput(Unit) {
+                                    detectTapGestures(
+                                        onDoubleTap = {
+                                            onMessageLiked(message.id)
+                                        }
+                                    )
+                                },
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
 
                             val context = LocalContext.current
@@ -377,7 +394,7 @@ fun ChatTopBarPreview() {
         ChatTopBar(
             conversation = Conversation(
                 image = R.drawable.kitten,
-                name = "Tanja Boskovic",
+                name = "Tanja Dragićević",
                 previousMessageType = MessageType.VoiceMessage,
                 timestamp = "15:30",
                 hasActiveStory = true,

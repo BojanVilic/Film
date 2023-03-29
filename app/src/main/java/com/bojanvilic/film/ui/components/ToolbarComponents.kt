@@ -137,7 +137,7 @@ fun TitleRow() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.kitten),
+            painter = painterResource(id = R.drawable.marijana),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

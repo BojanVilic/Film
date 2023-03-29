@@ -1,5 +1,6 @@
 package com.bojanvilic.film.ui
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,10 +14,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bojanvilic.film.R
 import com.bojanvilic.film.theme.AppTheme
 import com.bojanvilic.film.ui.components.TabRow
 import com.bojanvilic.film.ui.navigation.*
-import com.google.android.exoplayer2.MediaItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,12 +26,12 @@ class MainActivity : ComponentActivity() {
 
     private val chatViewModel: ChatViewModel by viewModels()
 
+    private lateinit var storyUri: Uri
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val mediaItem = MediaItem.fromUri(
-            "android.resource://" + application.packageName + "/raw/story_3"
-        )
+        storyUri = Uri.parse("android.resource://${packageName}/${R.raw.story_3}")
 
         setContent {
             AppTheme {
@@ -56,7 +57,12 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { paddingValues ->
-                    AppNavHost(chatViewModel, navController, modifier = Modifier.padding(paddingValues))
+                    AppNavHost(
+                        chatViewModel = chatViewModel,
+                        navController = navController,
+                        modifier = Modifier.padding(paddingValues),
+                        storyUri = storyUri
+                    )
                 }
             }
         }
@@ -67,7 +73,8 @@ class MainActivity : ComponentActivity() {
 fun AppNavHost(
     chatViewModel: ChatViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    storyUri: Uri
 ) {
     NavHost(
         navController = navController,
@@ -78,6 +85,6 @@ fun AppNavHost(
         generalScreen(navController, chatViewModel)
         requestsScreen(navController, chatViewModel)
         chatScreen(onBackClicked = { navController.navigateUp() }, chatViewModel)
-        storyScreen(navController, chatViewModel)
+        storyScreen(navController, chatViewModel, storyUri)
     }
 }

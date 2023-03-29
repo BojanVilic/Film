@@ -40,10 +40,10 @@ val AppTypography = Typography(
         fontSize = 24.sp, lineHeight = 32.sp, letterSpacing = 0.sp
     ),
     titleLarge = defaultTextStyle.copy(
-        fontSize = 22.sp, lineHeight = 28.sp, letterSpacing = 0.sp
+        fontSize = 24.sp, lineHeight = 28.sp, letterSpacing = 0.sp
     ),
     titleMedium = defaultTextStyle.copy(
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp,
         fontWeight = FontWeight.Medium
@@ -55,7 +55,7 @@ val AppTypography = Typography(
         fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp, fontWeight = FontWeight.Medium
     ),
     labelMedium = defaultArticleTextStyle.copy(
-        fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Medium
+        fontSize = 14.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Medium
     ),
     labelSmall = defaultArticleTextStyle.copy(
         fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Medium
@@ -64,7 +64,7 @@ val AppTypography = Typography(
         fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.5.sp
     ),
     bodyMedium = defaultArticleTextStyle.copy(
-        fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.25.sp
+        fontSize = 16.sp, lineHeight = 20.sp, letterSpacing = 0.25.sp
     ),
     bodySmall = defaultArticleTextStyle.copy(
         fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.4.sp

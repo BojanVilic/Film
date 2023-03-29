@@ -77,7 +77,8 @@ class ChatViewModel @Inject constructor(
             ),
             Message(
                 id = 6,
-                messageType = MessageType.Text,
+                messageType = MessageType.Image,
+                image = R.drawable.beba_cela,
                 isUserSender = false,
                 text = "Probna poruka sa jedne strane",
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
@@ -85,12 +86,14 @@ class ChatViewModel @Inject constructor(
             Message(
                 id = 7,
                 messageType = MessageType.Image,
+                image = R.drawable.beba_glava,
                 isUserSender = false,
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
                 id = 8,
                 messageType = MessageType.Image,
+                image = R.drawable.beba,
                 isUserSender = false,
                 timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             )
@@ -131,7 +134,7 @@ class ChatViewModel @Inject constructor(
         Conversation(
             id = 0,
             image = R.drawable.tanja,
-            name = "Tanja Bošković",
+            name = "Tanja Dragićević",
             previousMessageType = MessageType.Image,
             timestamp = "16:01",
             hasUnreadMessage = true,
@@ -147,8 +150,8 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 2,
-            image = R.drawable.kitten,
-            name = "Irina Dujaković",
+            image = R.drawable.ilija_tucic,
+            name = "Ilija Tucić",
             previousMessageType = MessageType.Image,
             timestamp = "Thu",
         ),
@@ -175,16 +178,16 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 5,
-            name = "Rastko Popović",
-            image = R.drawable.kitten,
+            name = "Vera Popović",
+            image = R.drawable.vera_popovic,
             previousMessageType = MessageType.Text,
-            timestamp = "Nekada davno",
-            previousMessageText = "Ova poruka mozda...",
+            timestamp = "1. Dec",
+            previousMessageText = "Suuperr!! ❤",
             hasActiveStory = true
         ),
         Conversation(
             id = 6,
-            name = "Bole",
+            name = "Rastko Popović",
             previousMessageType = MessageType.Image,
             timestamp = "21:35",
             hasActiveStory = false,
