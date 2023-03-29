@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.bojanvilic.film.theme.AppTheme
 import com.bojanvilic.film.ui.components.TabRow
 import com.bojanvilic.film.ui.navigation.*
+import com.google.android.exoplayer2.MediaItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,6 +27,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val mediaItem = MediaItem.fromUri(
+            "android.resource://" + application.packageName + "/raw/story_3"
+        )
+
         setContent {
             AppTheme {
                 val allScreens = TopLevelDestinations.values().toList()

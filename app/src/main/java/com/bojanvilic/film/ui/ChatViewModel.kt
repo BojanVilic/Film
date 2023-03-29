@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.bojanvilic.film.R
 import com.bojanvilic.film.ui.models.Conversation
 import com.bojanvilic.film.ui.models.Message
 import com.bojanvilic.film.ui.models.MessageType
@@ -129,7 +130,7 @@ class ChatViewModel @Inject constructor(
     var conversationList: List<Conversation> by mutableStateOf(listOf(
         Conversation(
             id = 0,
-            image = "",
+            image = R.drawable.tanja,
             name = "Tanja Bošković",
             previousMessageType = MessageType.Image,
             timestamp = "16:01",
@@ -138,7 +139,7 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 1,
-            image = "",
+            image = R.drawable.nino,
             name = "Nino",
             previousMessageType = MessageType.Text,
             timestamp = "Fri",
@@ -146,14 +147,14 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 2,
-            image = "",
+            image = R.drawable.kitten,
             name = "Irina Dujaković",
             previousMessageType = MessageType.Image,
             timestamp = "Thu",
         ),
         Conversation(
             id = 3,
-            image = "",
+            image = R.drawable.lidija,
             name = "Lidija Johnson",
             previousMessageType = MessageType.Text,
             timestamp = "16. Dec",
@@ -165,6 +166,7 @@ class ChatViewModel @Inject constructor(
         Conversation(
             id = 4,
             name = "Snežana Maletin",
+            image = R.drawable.snezana_maletin,
             previousMessageType = MessageType.Text,
             timestamp = "1. Dec",
             hasActiveStory = false,
@@ -174,6 +176,7 @@ class ChatViewModel @Inject constructor(
         Conversation(
             id = 5,
             name = "Rastko Popović",
+            image = R.drawable.kitten,
             previousMessageType = MessageType.Text,
             timestamp = "Nekada davno",
             previousMessageText = "Ova poruka mozda...",
@@ -181,7 +184,6 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 6,
-            image = "",
             name = "Bole",
             previousMessageType = MessageType.Image,
             timestamp = "21:35",
@@ -190,7 +192,6 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 7,
-            image = "",
             name = "Mile",
             previousMessageType = MessageType.Text,
             timestamp = "22:25",
@@ -198,7 +199,6 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 8,
-            image = "",
             name = "Bole",
             previousMessageType = MessageType.Image,
             timestamp = "21:35",
@@ -207,7 +207,6 @@ class ChatViewModel @Inject constructor(
         ),
         Conversation(
             id = 9,
-            image = "",
             name = "Mile",
             previousMessageType = MessageType.Text,
             timestamp = "22:25",

@@ -37,16 +37,16 @@ fun StoryScreen(
     onImageClicked: () -> Unit
 ) {
 
-
-
     Surface {
-        StoryContent(
-            progressBarValue = storyViewModel.progressBarValue,
-            progressBarValue2 = storyViewModel.progressBarValue2,
-            onImageClicked = {
-                onImageClicked()
-            }
-        )
+//        StoryContent(
+//            progressBarValue = storyViewModel.progressBarValue,
+//            progressBarValue2 = storyViewModel.progressBarValue2,
+//            onImageClicked = {
+//                onImageClicked()
+//            }
+//        )
+
+        VideoView(videoUri = "https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4")
     }
 }
 

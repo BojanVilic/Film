@@ -101,7 +101,7 @@ fun ConversationsListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.kitten),
+            painter = painterResource(id = conversation.image),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = if (conversation.hasActiveStory)
@@ -160,7 +160,7 @@ fun ConversationsListItemPreview() {
     AppTheme {
         ConversationsListItem(
             conversation = Conversation(
-                image = "",
+                image = R.drawable.kitten,
                 name = "Tanja Boskovic",
                 previousMessageType = MessageType.VoiceMessage,
                 timestamp = "15:30",

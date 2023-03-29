@@ -3,6 +3,7 @@
 package com.bojanvilic.film.ui.components
 
 import android.media.MediaPlayer
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -138,7 +139,8 @@ fun ChatContent(
                 attachProfilePhoto = messageList[it].isUserSender.not(),
                 onMessageLiked = { messageId ->
                     onMessageLiked(messageId)
-                }
+                },
+                profilePhoto = conversation.image
             )
         }
     }
@@ -148,7 +150,8 @@ fun ChatContent(
 fun MessageItem(
     message: Message,
     attachProfilePhoto: Boolean = false,
-    onMessageLiked: (Int) -> Unit
+    onMessageLiked: (Int) -> Unit,
+    @DrawableRes profilePhoto: Int
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -174,9 +177,8 @@ fun MessageItem(
                     )
                 }
 
-            var audioPlaying by remember {
-                mutableStateOf(false)
-            }
+            var mediaPlayer: MediaPlayer? = null
+            var audioPlaying by remember { mutableStateOf(false) }
 
             Column(
                 horizontalAlignment = Alignment.End
@@ -186,7 +188,7 @@ fun MessageItem(
                 ) {
                     if (attachProfilePhoto) {
                         Image(
-                            painter = painterResource(id = R.drawable.kitten),
+                            painter = painterResource(id = profilePhoto),
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
@@ -234,9 +236,19 @@ fun MessageItem(
                             Image(
                                 modifier = Modifier
                                     .clickable {
-                                        audioPlaying = !audioPlaying
-                                        val mediaPlayer = MediaPlayer.create(context, R.raw.zvonkec)
-                                        mediaPlayer.start()
+                                        if (audioPlaying) {
+                                            mediaPlayer?.stop()
+                                            mediaPlayer?.release()
+                                            mediaPlayer = null
+                                            audioPlaying = false
+                                        } else {
+                                            mediaPlayer = MediaPlayer.create(context, R.raw.glasovna)
+                                            mediaPlayer?.setOnCompletionListener {
+                                                audioPlaying = false
+                                            }
+                                            mediaPlayer?.start()
+                                            audioPlaying = true
+                                        }
                                     },
                                 painter = painterResource(id = if (audioPlaying) R.drawable.ic_baseline_pause_24 else R.drawable.ic_baseline_play_arrow_24),
                                 contentDescription = null
@@ -251,6 +263,12 @@ fun MessageItem(
                         painter = painterResource(id = R.drawable.ic_heart),
                         contentDescription = null
                     )
+                }
+            }
+
+            DisposableEffect(Unit) {
+                onDispose {
+                    mediaPlayer?.release()
                 }
             }
         }
@@ -296,7 +314,7 @@ fun ChatTopBar(
             )
             Spacer(modifier = Modifier.weight(0.2f))
             Image(
-                painter = painterResource(id = R.drawable.kitten),
+                painter = painterResource(id = conversation.image),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -358,7 +376,7 @@ fun ChatTopBarPreview() {
     AppTheme {
         ChatTopBar(
             conversation = Conversation(
-                image = "",
+                image = R.drawable.kitten,
                 name = "Tanja Boskovic",
                 previousMessageType = MessageType.VoiceMessage,
                 timestamp = "15:30",
@@ -377,7 +395,8 @@ fun LeftSideMessagePreview() {
         MessageItem(
             message = previewMessageList[1],
             onMessageLiked = {},
-            attachProfilePhoto = true
+            attachProfilePhoto = true,
+            profilePhoto = R.drawable.kitten
         )
     }
 }
