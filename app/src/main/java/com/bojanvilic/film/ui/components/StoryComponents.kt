@@ -8,11 +8,12 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,7 +57,7 @@ fun StoryScreen(
     }
 
     LaunchedEffect(Unit) {
-        delay(24500)
+        delay(18500)
         navController.popBackStack()
     }
 }
@@ -77,11 +77,11 @@ fun StoryContent(
 
         val progressAnimation by animateFloatAsState(
             targetValue = progressBarValue,
-            animationSpec = tween(durationMillis = 8000, easing = LinearEasing)
+            animationSpec = tween(durationMillis = 5000, easing = LinearEasing)
         )
         val progressAnimation2 by animateFloatAsState(
             targetValue = progressBarValue2,
-            animationSpec = tween(durationMillis = 8000, easing = LinearEasing)
+            animationSpec = tween(durationMillis = 5000, easing = LinearEasing)
         )
         val progressAnimation3 by animateFloatAsState(
             targetValue = progressBarValue3,
@@ -149,33 +149,38 @@ fun StoryContent(
             if (progressAnimation != 0f && progressAnimation != 1f) {
                 Image(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 32.dp)
+                        .fillMaxWidth()
+                        .height(580.dp)
+                        .padding(bottom = 16.dp)
                         .clickable {
                             onStoryClicked()
                         },
                     painter = painterResource(id = R.drawable.story_1),
-                    contentDescription = null
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit
+
                 )
             }
             if (progressAnimation2 != 0f && progressAnimation2 != 1f) {
                 Image(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 62.dp)
+                        .fillMaxWidth()
+                        .height(580.dp)
+                        .padding(bottom = 16.dp)
                         .clickable {
                             onStoryClicked()
                         },
                     painter = painterResource(id = R.drawable.story_2),
-                    contentDescription = null
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
                 )
             }
             if (progressAnimation3 != 0f && progressAnimation3 != 1f) {
                 VideoView(
                     modifier = Modifier
-                        .padding(top = 42.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.8f)
+                        .height(580.dp)
+                        .padding(bottom = 16.dp)
                         .background(Color.Black),
                     videoUri = storyUri.toString()
                 )
@@ -185,20 +190,22 @@ fun StoryContent(
             modifier = Modifier.align(Alignment.BottomCenter),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            OutlinedTextField(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
-                    .padding(horizontal = 8.dp, vertical = 16.dp),
-                value = "",
-                placeholder = { Text(text = "Send message", color = Color.DarkGray) },
-                onValueChange = {  },
-                shape = CircleShape,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary
-                ),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
-            )
+                    .padding(horizontal = 8.dp, vertical = 16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape
+                    )
+            ) {
+                BasicTextField(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                    value = "Send a message",
+                    onValueChange = {}
+                )
+            }
             Image(
                 modifier = Modifier
                     .padding(vertical = 16.dp),

@@ -136,6 +136,20 @@ fun ChatContent(
     ) {
         items(messageList.size) {
 
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AnimatedVisibility(visible = messageList[it].timestamp != null) {
+                    Text(
+                        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        text = messageList[it].timestamp?.toReadableString() ?: "",
+                        color = Color.Black
+                    )
+                }
+            }
+
             MessageItem(
                 message = messageList[it],
                 attachProfilePhoto = messageList[it].isUserSender.not(),
@@ -157,7 +171,7 @@ fun MessageItem(
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 8.dp)) {
+        .padding(horizontal = 8.dp, vertical = 8.dp)) {
         Row(
             modifier = Modifier
                 .padding(vertical = 4.dp)
@@ -185,14 +199,6 @@ fun MessageItem(
             Column(
                 horizontalAlignment = Alignment.End
             ) {
-                AnimatedVisibility(visible = message.timestamp != null) {
-                    Text(
-                        modifier = Modifier.padding(vertical = 4.dp),
-                        style = MaterialTheme.typography.bodySmall,
-                        text = message.timestamp?.toReadableString()?: "",
-                        color = Color.Black
-                    )
-                }
                 Row(
                     verticalAlignment = Alignment.Bottom
                 ) {
@@ -223,9 +229,10 @@ fun MessageItem(
                     }
                     if (message.messageType == MessageType.Image) {
                         Image(
-                            modifier = messageModifier,
+                            modifier = messageModifier.heightIn(min = 240.dp),
                             painter = painterResource(id = message.image),
-                            contentDescription = null
+                            contentDescription = null,
+                            contentScale = if (message.image == R.drawable.green) ContentScale.FillBounds else ContentScale.Fit
                         )
                     }
                     if (message.messageType == MessageType.VoiceMessage) {

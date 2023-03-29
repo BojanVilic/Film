@@ -23,10 +23,10 @@ class StoryViewModel @Inject constructor(): ViewModel() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             progressBarValue2 = 1f
-        }, 8500)
+        }, 5500)
 
         Handler(Looper.getMainLooper()).postDelayed({
             progressBarValue3 = 1f
-        }, 16500)
+        }, 10500)
     }
 }

@@ -94,24 +94,46 @@ class ChatViewModel @Inject constructor(
         listOf(
             Message(
                 id = 0,
-                messageType = MessageType.Image,
+                messageType = MessageType.VoiceMessage,
                 isUserSender = true,
             ),
             Message(
                 id = 1,
+                messageType = MessageType.VoiceMessage,
+                isUserSender = false,
+            ),
+            Message(
+                id = 2,
+                messageType = MessageType.VoiceMessage,
+                isUserSender = true,
+            ),
+            Message(
+                id = 3,
+                messageType = MessageType.Image,
+                image = R.drawable.green,
+                isUserSender = true,
+            ),
+            Message(
+                id = 4,
+                messageType = MessageType.Image,
+                image = R.drawable.green,
+                isUserSender = true,
+            ),
+            Message(
+                id = 5,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Vaza je prelepaaa,\nhvala ti do neba!! ❤",
             ),
             Message(
-                id = 2,
+                id = 6,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Love you guyss \uD83D\uDE18 \uD83D\uDE18",
                 timestamp = LocalDateTime.of(2022, 5, 12, 21, 7)
             ),
             Message(
-                id = 3,
+                id = 7,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Kako je u engleskoj?\nHocete dolaziti kod nas?",
@@ -173,7 +195,7 @@ class ChatViewModel @Inject constructor(
             previousMessageType = MessageType.Text,
             timestamp = "1. Dec",
             previousMessageText = "Suuperr!! ❤",
-            hasActiveStory = true
+            hasActiveStory = false
         ),
         Conversation(
             id = 6,
