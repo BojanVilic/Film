@@ -49,7 +49,6 @@ fun StoryScreen(
             },
             storyUri = storyUri,
             onStoryClicked = {
-                storyViewModel.onStoryClicked()
             }
         )
     }
@@ -143,6 +142,7 @@ fun StoryContent(
                 Image(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(bottom = 32.dp)
                         .clickable {
                             onStoryClicked()
                         },
@@ -154,6 +154,7 @@ fun StoryContent(
                 Image(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(bottom = 62.dp)
                         .clickable {
                             onStoryClicked()
                         },
