@@ -39,41 +39,35 @@ class ChatViewModel @Inject constructor(
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Probna poruka sa jedne strane",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
                 id = 1,
                 messageType = MessageType.Image,
                 isUserSender = true,
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
                 id = 2,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Nekako i slika da se namesti",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
                 id = 3,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Nekako i slika da se namesti",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
                 id = 4,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Druga poruka sa druge strane",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
                 id = 5,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane Druga poruka sa druge strane ",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
                 id = 6,
@@ -81,21 +75,18 @@ class ChatViewModel @Inject constructor(
                 image = R.drawable.beba_cela,
                 isUserSender = false,
                 text = "Probna poruka sa jedne strane",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
                 id = 7,
                 messageType = MessageType.Image,
                 image = R.drawable.beba_glava,
                 isUserSender = false,
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
                 id = 8,
                 messageType = MessageType.Image,
                 image = R.drawable.beba,
                 isUserSender = false,
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             )
         ))
 
@@ -105,28 +96,27 @@ class ChatViewModel @Inject constructor(
                 id = 0,
                 messageType = MessageType.Image,
                 isUserSender = true,
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
             ),
             Message(
                 id = 1,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Vaza je prelepaaa,\nhvala ti do neba!! ❤",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
             ),
             Message(
                 id = 2,
                 messageType = MessageType.Text,
                 isUserSender = false,
                 text = "Love you guyss \uD83D\uDE18 \uD83D\uDE18",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
+                timestamp = LocalDateTime.of(2022, 5, 12, 21, 7)
             ),
             Message(
                 id = 3,
                 messageType = MessageType.Text,
                 isUserSender = true,
                 text = "Kako je u engleskoj?\nHocete dolaziti kod nas?",
-                timestamp = LocalDateTime.of(2023, 1, 22, 13, 6)
+                timestamp = LocalDateTime.of(2023, 12, 16, 21, 7),
+                seen = true
             )
         ))
 
@@ -245,7 +235,6 @@ class ChatViewModel @Inject constructor(
                         id = 9,
                         messageType = MessageType.VoiceMessage,
                         isUserSender = false,
-                        timestamp = LocalDateTime.of(2023, 1, 22, 13, 5)
                     )
                 )
 

@@ -11,6 +11,7 @@ data class Message(
     val text: String = "",
     @DrawableRes val image: Int = R.drawable.kitten,
     val voiceMessage: String = "",
-    val timestamp: LocalDateTime = LocalDateTime.now(),
-    val liked: Boolean = false
+    val timestamp: LocalDateTime? = null,
+    val liked: Boolean = false,
+    val seen: Boolean = false
 )

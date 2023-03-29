@@ -44,6 +44,7 @@ import com.bojanvilic.film.ui.ChatViewModel
 import com.bojanvilic.film.ui.models.Conversation
 import com.bojanvilic.film.ui.models.Message
 import com.bojanvilic.film.ui.models.MessageType
+import com.bojanvilic.film.util.toReadableString
 
 @Composable
 fun ChatScreen(
@@ -184,6 +185,14 @@ fun MessageItem(
             Column(
                 horizontalAlignment = Alignment.End
             ) {
+                AnimatedVisibility(visible = message.timestamp != null) {
+                    Text(
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        text = message.timestamp?.toReadableString()?: "",
+                        color = Color.Black
+                    )
+                }
                 Row(
                     verticalAlignment = Alignment.Bottom
                 ) {
@@ -273,6 +282,15 @@ fun MessageItem(
                         }
                     }
                 }
+
+                AnimatedVisibility(visible = message.seen) {
+                    Text(
+                        style = MaterialTheme.typography.bodySmall,
+                        text = "Seen.",
+                        color = Color.Black
+                    )
+                }
+
                 AnimatedVisibility(visible = message.liked) {
                     Image(
                         modifier = Modifier
