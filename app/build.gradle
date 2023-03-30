@@ -103,7 +103,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-core:2.18.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.5'
 
-
+    implementation 'com.github.raipankaj:Stories:1.0.2'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.5.1'

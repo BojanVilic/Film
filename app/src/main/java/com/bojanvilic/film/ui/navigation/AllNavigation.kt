@@ -16,7 +16,7 @@ fun NavGraphBuilder.allScreen(navController: NavHostController, chatViewModel: C
                 navController.navigate("$chatRoute/$chatId")
             },
             onStoryClicked = {
-                navController.navigate(storyRoute)
+                navController.navigate("$storyRoute/3/1")
             }
         )
     }
